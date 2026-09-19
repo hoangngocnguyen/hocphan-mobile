@@ -1,0 +1,13 @@
+## BÀI 1: Điều tra công nghệ của 5 ứng dụng thường xuyên sử dụng.
+
+| **Ứng dụng**  | **Nhóm ứng dụng**      | **Nền tảng**          | **Công nghệ/chức năng nổi bật**                                  | **Trải nghiệm sử dụng**                                                                   |
+| ------------- | ---------------------- | --------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Facebook**  | Mạng xã hội            | Android, iOS, Web     | Feed, video, hình ảnh, thông báo, mạng xã hội thời gian thực     | Nhiều nội dung, thao tác tương đối trực quan nhưng giao diện có nhiều chức năng           |
+| **Messenger** | Nhắn tin               | Android, iOS, Web     | Nhắn tin thời gian thực, gọi thoại/video, gửi ảnh, file, sticker | Tốc độ phản hồi nhanh, phù hợp giao tiếp cá nhân và nhóm                                  |
+| **Zalo**      | Nhắn tin & mạng xã hội | Android, iOS, Web     | Tin nhắn, gọi điện, gửi file, nhóm, dịch vụ tích hợp             | Dễ sử dụng, phù hợp nhu cầu liên lạc hàng ngày tại Việt Nam                               |
+| **Shopee**    | Thương mại điện tử     | Android, iOS, Web     | Tìm kiếm, giỏ hàng, thanh toán, đơn hàng, livestream, voucher    | Nhiều tính năng và thông tin, thuận tiện mua sắm nhưng có thể gây cảm giác nhiều nội dung |
+| **YouTube**   | Video trực tuyến       | Android, iOS, Web, TV | Video, Shorts, tìm kiếm, đề xuất nội dung, livestream            | Khả năng tìm và xem nội dung tốt, hệ thống đề xuất giúp tiếp tục khám phá nội dung        |
+
+### Nhận xét về trải nghiệm người dùng
+
+Trong 5 ứng dụng, Facebook, Messenger, Zalo, Shopee và YouTube đều tập trung vào các thao tác thường xuyên như tìm kiếm, xem nội dung, giao tiếp hoặc thực hiện giao dịch. Các ứng dụng đều có giao diện được thiết kế cho thao tác trên màn hình cảm ứng và duy trì các thành phần quen thuộc như thanh điều hướng, nút hành động và thông báo. Messenger và Zalo ưu tiên tốc độ giao tiếp, trong khi Shopee phải xử lý nhiều bước hơn do có tìm kiếm, lựa chọn sản phẩm, giỏ hàng và thanh toán. YouTube tập trung mạnh vào khả năng khám phá nội dung thông qua tìm kiếm và đề xuất. Facebook có phạm vi chức năng rộng nên lượng thông tin trên giao diện lớn hơn. Nhìn chung, trải nghiệm người dùng của các ứng dụng này phụ thuộc nhiều vào khả năng tổ chức lượng lớn nội dung và giảm số thao tác cần thiết cho các chức năng thường xuyên.
