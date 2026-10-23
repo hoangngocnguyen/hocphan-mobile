@@ -117,6 +117,7 @@ class _ComplicatedImageSliderDemoState
         .toList();
 
     return Scaffold(
+      // dùng Scaffold vì nó cung cấp sẵn cấu trúc (khung xương) màn hình chuẩn (nhiều thành phần)
       backgroundColor: const Color(0xFFF7F9FC),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 245, 118, 207),
@@ -131,9 +132,12 @@ class _ComplicatedImageSliderDemoState
         ),
       ),
       body: SafeArea(
+        // Dùng SafeArea bọc bên trong body để nội dung không bị lẹm vào tai thỏ hay thanh trạng thái màn hình điện thoại
         child: SingleChildScrollView(
+          // SingleChildScrollView hỗ trợ scroll
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            //  MainAxisSize.min để cho Column chỉ co lại vừa khít với tổng chiều cao của các widget con bên trong nó, thay vì chiếm trọn màn hình.
             children: [
               const SizedBox(height: 24),
               CarouselSlider(
@@ -154,10 +158,11 @@ class _ComplicatedImageSliderDemoState
                 ),
               ),
               const SizedBox(height: 16),
-              // Vị trí ảnh
+              // Dấu tròn vị trí ảnh
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: imgList.asMap().entries.map((entry) {
+                  // biến list thành mao: key và số, value là giá trị trong list
                   return Container(
                     width: _current == entry.key ? 20.0 : 8.0,
                     height: 8.0,
