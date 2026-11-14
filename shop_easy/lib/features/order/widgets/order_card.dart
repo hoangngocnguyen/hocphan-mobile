@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_easy/core/constants/app_colors.dart';
+import 'package:shop_easy/core/utils/formatters.dart';
 
 class OrderCard extends StatelessWidget {
   final String orderCode;
@@ -119,7 +120,7 @@ class OrderCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${total.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}đ',
+                      AppFormatters.formatCurrency(total),
                       style: const TextStyle(
                         fontSize: 16,
                         color: AppColors.primary,

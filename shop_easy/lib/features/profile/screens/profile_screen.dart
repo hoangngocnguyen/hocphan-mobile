@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_easy/core/constants/app_colors.dart';
+import 'package:shop_easy/features/admin/screens/admin_dashboard_screen.dart';
 import 'package:shop_easy/features/auth/screens/login_screen.dart';
 import 'package:shop_easy/features/cart/screens/cart_screen.dart';
 import 'package:shop_easy/features/order/screens/order_screen.dart';
@@ -9,8 +10,13 @@ import 'package:shop_easy/features/settings/screens/settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final bool isLoggedIn;
+  final bool isAdmin;
 
-  const ProfileScreen({super.key, this.isLoggedIn = false});
+  const ProfileScreen({
+    super.key,
+    this.isLoggedIn = false,
+    this.isAdmin = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +24,9 @@ class ProfileScreen extends StatelessWidget {
     final email = isLoggedIn
         ? 'hoang.nguyen@gmail.com'
         : 'Vui lòng đăng nhập để trải nghiệm đầy đủ';
-    const avatarUrl =
-        'https://res.cloudinary.com/dojey70x3/image/upload/v1794666881/Avatar_vptggz.jpg';
+    final avatarUrl = isLoggedIn ?
+        'https://res.cloudinary.com/dojey70x3/image/upload/v1794666881/Avatar_vptggz.jpg'
+        : 'https://i.pinimg.com/736x/bc/43/98/bc439871417621836a0eeea768d60944.jpg';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6FB),
@@ -87,6 +94,21 @@ class ProfileScreen extends StatelessWidget {
                   );
                 },
               ),
+              if (isAdmin)
+                ProfileMenuItem(
+                  icon: Icons.dashboard_customize_rounded,
+                  title: 'Dashboard Admin',
+                  subtitle: 'Xem tổng quan kinh doanh',
+                  accent: const Color(0xFF22C55E),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AdminDashboardScreen(),
+                      ),
+                    );
+                  },
+                ),
               ProfileMenuItem(
                 icon: Icons.location_on_outlined,
                 title: 'Địa chỉ giao hàng',
