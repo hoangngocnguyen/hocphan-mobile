@@ -4,11 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ThemeController extends ChangeNotifier {
   static const String _storageKey = 'is_dark_mode';
 
-  final SharedPreferences _preferences;
+  final SharedPreferences preferences;
   bool _isDarkMode = false;
 
-  ThemeController({required this._preferences}) {
-    _isDarkMode = _preferences.getBool(_storageKey) ?? false;
+  ThemeController({required this.preferences}) {
+    _isDarkMode = preferences.getBool(_storageKey) ?? false;
   }
 
   bool get isDarkMode => _isDarkMode;
@@ -17,7 +17,7 @@ class ThemeController extends ChangeNotifier {
 
   Future<void> setDarkMode(bool value) async {
     _isDarkMode = value;
-    await _preferences.setBool(_storageKey, value);
+    await preferences.setBool(_storageKey, value);
     notifyListeners();
   }
 
