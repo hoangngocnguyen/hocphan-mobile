@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_easy/core/constants/app_colors.dart';
 import 'package:shop_easy/core/theme/theme_controller.dart';
-import 'package:shop_easy/features/auth/screens/login_screen.dart';
+import 'package:shop_easy/features/main/screens/main_layout_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -117,7 +117,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pop(context, true);
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const MainLayoutScreen(
+                      initialIndex: 0,
+                      isLoggedIn: false,
+                    ),
+                  ),
                   (route) => false,
                 );
               },

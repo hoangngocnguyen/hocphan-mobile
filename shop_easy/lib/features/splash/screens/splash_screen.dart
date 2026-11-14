@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_colors.dart';
-import '../../home/screens/home_screen.dart';
+import '../../main/screens/main_layout_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -54,18 +54,21 @@ class _SplashScreenState extends State<SplashScreen>
     // Chạy chuỗi Animation
     _controller.forward();
 
-    // Chuyển sang HomeScreen sau 3 giây
     _navigateToHome();
   }
 
   Future<void> _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 3));
 
-    // BẮT BUỘC kiểm tra mounted trước khi gọi Navigator để tránh lỗi Context
     if (!mounted) return;
 
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(
+        builder: (context) => const MainLayoutScreen(
+          initialIndex: 0,
+          isLoggedIn: false,
+        ),
+      ),
     );
   }
 

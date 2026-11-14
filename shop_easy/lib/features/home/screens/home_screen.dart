@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:shop_easy/features/auth/screens/login_screen.dart';
 import 'package:shop_easy/features/auth/screens/register_screen.dart';
+import 'package:shop_easy/features/cart/screens/cart_screen.dart';
+import 'package:shop_easy/features/product/screens/product_detail_screen.dart';
 import 'package:shop_easy/features/product/widgets/product_cart.dart';
 
 import '../../../core/constants/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isLoggedIn;
+
+  const HomeScreen({super.key, this.isLoggedIn = false});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends State<HomeScreen> {
-  // Trạng thái tìm kiếm và danh mục đang chọn
   String _searchQuery = '';
   String _selectedCategory = 'Tất cả';
 
-  // Danh mục mẫu
   final List<String> _categories = ['Tất cả', 'Điện thoại', 'Laptop', 'Thời trang', 'Phụ kiện', 'Giày dép'];
 
-  // Dữ liệu sản phẩm mẫu
   final List _allProducts = [
     {
       'name': 'Giày Sneaker Thể Thao Nam Nữ Phong Cách',
@@ -29,7 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
       'currentPrice': 450000,
       'originalPrice': 600000,
       'discountPercent': 25,
-      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXkTNL_4eIZHiaUfHc-lMzYQ42Ess6OihOJFYvVQai8Q&s=10',
+      'imageUrl': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80',
+      'images': [
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=900&q=80',
+      ],
     },
     {
       'name': 'Điện thoại thông minh cấu hình khủng RAM 12GB',
@@ -39,7 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
       'currentPrice': 8900000,
       'originalPrice': 10500000,
       'discountPercent': 15,
-      'imageUrl': 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRKCNEYGyUn2QHRCgis0Hy4dp4WfNR8WNAzxh5eChl2QlWprINlngvFDFljJdGDrUOlCpVTfHcaxL4nREcCksv7gn2Fxqbb',
+      'imageUrl': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80',
+      'images': [
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1569183091674-21a6d3f7c776?auto=format&fit=crop&w=900&q=80',
+      ],
     },
     {
       'name': 'Laptop Gaming Hiệu Năng Cao Core i7',
@@ -49,7 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
       'currentPrice': 21990000,
       'originalPrice': 25000000,
       'discountPercent': 12,
-      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWQD_Gwm2nT99IxN-QY6QZ-oQieYymKPhObCM-7QId0A&s=10',
+      'imageUrl': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=80',
+      'images': [
+        'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=80',
+      ],
     },
     {
       'name': 'Áo khoác gió thể thao trượt nước cao cấp',
@@ -59,13 +76,17 @@ class _HomeScreenState extends State<HomeScreen> {
       'currentPrice': 320000,
       'originalPrice': 450000,
       'discountPercent': 28,
-      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhKuVz5UgeWM8MupIcI3h6QpI8aALjAEPsZReHkeri5g&s=10',
+      'imageUrl': 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80',
+      'images': [
+        'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80',
+        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',
+      ],
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    // Lọc danh sách sản phẩm theo danh mục và từ khóa tìm kiếm
     final filteredProducts = _allProducts.where((product) {
       final matchesCategory = _selectedCategory == 'Tất cả' || product['category'] == _selectedCategory;
       final matchesSearch = product['name'].toLowerCase().contains(_searchQuery.toLowerCase());
@@ -74,59 +95,95 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ShopEasy - Trang chủ'),
+        title: Text(widget.isLoggedIn ? 'ShopEasy - Trang chủ' : 'ShopEasy - Trang chủ'),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
-        actions: [
-          // Nút Đăng nhập dạng TextButton có Icon
-          TextButton.icon(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-            label: const Text(
-              'Đăng nhập',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-            ),
-          ),
-          
-          const SizedBox(width: 4),
-
-          // Nút Đăng ký được làm nổi bật hơn với viền hoặc nền khác nhẹ
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-            child: OutlinedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                );
-              },
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white,
-                side: const BorderSide(color: Colors.white, width: 1.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+        actions: widget.isLoggedIn
+            ? [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CartScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                    ),
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        width: 18,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          color: AppColors.secondary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '2',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-              ),
-              child: const Text(
-                'Đăng ký',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ],
+              ]
+            : [
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    );
+                  },
+                  label: const Text(
+                    'Đăng nhập',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                  icon: const Icon(Icons.login_rounded, color: Colors.white),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                      );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(color: Colors.white, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                    child: const Text(
+                      'Đăng ký',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 2. Ô tìm kiếm bo tròn
           Container(
             padding: const EdgeInsets.all(16.0),
-            color: Colors.white,
+            color: AppColors.surface,
             child: TextField(
               onChanged: (value) {
                 setState(() {
@@ -135,9 +192,9 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Tìm sản phẩm...',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                prefixIcon: const Icon(Icons.search, color: AppColors.textSecondary),
                 filled: true,
-                fillColor: const Color(0xFFF1F5F9),
+                fillColor: AppColors.surfaceAlt,
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -146,10 +203,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-          // 3. Hàng chip danh mục cuộn ngang
           Container(
-            color: Colors.white,
+            color: AppColors.surface,
             padding: const EdgeInsets.only(left: 16.0, bottom: 12.0),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -161,17 +216,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ChoiceChip(
                       label: Text(category),
                       selected: isSelected,
-                      selectedColor: const Color(0xFF2563EB),
+                      selectedColor: AppColors.primary,
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : const Color(0xFF475569),
+                        color: isSelected ? Colors.white : AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
-                      backgroundColor: const Color(0xFFF1F5F9),
+                      backgroundColor: AppColors.surfaceAlt,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                         side: BorderSide.none,
                       ),
-                      onSelected: (selected) {
+                      onSelected: (_) {
                         setState(() {
                           _selectedCategory = category;
                         });
@@ -182,22 +237,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
           const SizedBox(height: 8),
-
-          // 4. Lưới sản phẩm
           Expanded(
             child: filteredProducts.isEmpty
                 ? const Center(
-                    child: Text('Không tìm thấy sản phẩm phù hợp', style: TextStyle(color: Colors.grey)),
+                    child: Text(
+                      'Không tìm thấy sản phẩm phù hợp',
+                      style: TextStyle(color: AppColors.textSecondary),
+                    ),
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.all(16.0),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 cột
+                      crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 0.73, // Tỷ lệ chiều rộng/chiều cao của card
+                      childAspectRatio: 0.73,
                     ),
                     itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
@@ -211,10 +266,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         originalPrice: item['originalPrice'],
                         discountPercent: item['discountPercent'],
                         addToCart: () {
-                          debugPrint('Đã thêm ${item['name']} vào giỏ hàng');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Đã thêm ${item['name']} vào giỏ hàng'),
+                              backgroundColor: AppColors.success,
+                            ),
+                          );
                         },
                         onFavoritePressed: () {
-                          debugPrint('Đã bấm yêu thích sản phẩm');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Đã lưu sản phẩm yêu thích'),
+                              backgroundColor: AppColors.primary,
+                            ),
+                          );
+                        },
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailScreen(product: item),
+                            ),
+                          );
                         },
                       );
                     },

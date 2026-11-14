@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shop_easy/core/constants/app_colors.dart';
 import 'package:shop_easy/features/auth/screens/forgot_password_screen.dart';
 import 'package:shop_easy/features/auth/screens/register_screen.dart';
-import 'package:shop_easy/features/settings/screens/settings_screen.dart';
+import 'package:shop_easy/features/main/screens/main_layout_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,20 +24,45 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void _handleLogin() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email == 'hoang@gmail.com' && password == '123456') {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainLayoutScreen(
+            initialIndex: 0,
+            isLoggedIn: true,
+          ),
+        ),
+        (route) => false,
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại.'),
+        backgroundColor: AppColors.error,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: SizedBox(
-              // Giới hạn width
               width: 450,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch, // giãn hết width
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Center(
                     child: Container(
@@ -44,13 +70,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 90,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.blue.shade50,
-                        border: Border.all(color: Colors.blue.shade200, width: 2),
+                        color: AppColors.primaryLight,
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.35), width: 2),
                       ),
                       child: const Icon(
                         Icons.lock_person_rounded,
                         size: 45,
-                        color: Colors.blue,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -61,14 +87,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   const Text(
                     'Chào mừng bạn quay trở lại, vui lòng đăng nhập để tiếp tục',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
                   ),
                   const SizedBox(height: 32),
                   TextField(
@@ -77,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: InputDecoration(
                       labelText: 'Email',
                       hintText: 'Nhập email của bạn',
-                      prefixIcon: const Icon(Icons.email_outlined),
+                      prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -90,12 +116,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: InputDecoration(
                       labelText: 'Mật khẩu',
                       hintText: 'Nhập mật khẩu của bạn',
-                      prefixIcon: const Icon(Icons.lock_outline),
+                      prefixIcon: const Icon(Icons.lock_outline, color: AppColors.primary),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
+                          color: AppColors.textSecondary,
                         ),
                         onPressed: () {
                           setState(() {
@@ -114,34 +141,33 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       TextButton(
                         onPressed: () async {
-                          // Chờ kết quả trả về từ RegisterScreen
+                          final messenger = ScaffoldMessenger.maybeOf(context);
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const RegisterScreen(),
                             ),
                           );
-              
-                          // Nếu nhận được email và mật khẩu trả về, tự động điền vào ô input
-                          if (result != null && mounted) {
+
+                          if (!mounted) return;
+
+                          if (result != null) {
                             setState(() {
                               _emailController.text = result['email'] ?? '';
                               _passwordController.text = result['password'] ?? '';
                             });
-              
-                            ScaffoldMessenger.of(context).showSnackBar(
+
+                            messenger?.showSnackBar(
                               const SnackBar(
-                                content: Text(
-                                  'Đăng ký tài khoản thành công! Vui lòng đăng nhập.',
-                                ),
-                                backgroundColor: Colors.green,
+                                content: Text('Đăng ký tài khoản thành công! Vui lòng đăng nhập.'),
+                                backgroundColor: AppColors.success,
                               ),
                             );
                           }
                         },
                         child: const Text(
                           'Đăng ký tài khoản',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: AppColors.primary),
                         ),
                       ),
                       TextButton(
@@ -155,26 +181,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: const Text(
                           'Quên mật khẩu?',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: AppColors.textSecondary),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
-                      // Xử lý logic đăng nhập
-                      // Thay thế màn hình login bằng màn setting
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SettingsScreen(),
-                        ),
-                        (route) => false,
-                      );
-                    },
+                    onPressed: _handleLogin,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.primary,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -190,12 +206,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 24),
                   Row(
                     children: const [
-                      Expanded(child: Divider(thickness: 1)),
+                      Expanded(child: Divider(thickness: 1, color: AppColors.divider)),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text('Hoặc', style: TextStyle(color: Colors.grey)),
+                        child: Text('Hoặc', style: TextStyle(color: AppColors.textSecondary)),
                       ),
-                      Expanded(child: Divider(thickness: 1)),
+                      Expanded(child: Divider(thickness: 1, color: AppColors.divider)),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -203,15 +219,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {},
                     label: const Text(
                       'Tiếp tục với Google',
-                      style: TextStyle(fontSize: 16, color: Colors.black87),
+                      style: TextStyle(fontSize: 16, color: AppColors.textPrimary),
                     ),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      side: BorderSide(color: Colors.grey.shade300),
+                      side: BorderSide(color: AppColors.divider),
                     ),
+                    icon: const Icon(Icons.g_mobiledata_rounded, color: AppColors.primary),
                   ),
                 ],
               ),

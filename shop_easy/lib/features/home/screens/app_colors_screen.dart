@@ -20,8 +20,7 @@ class MyApp extends StatelessWidget {
 class AppColorsScreen extends StatelessWidget {
   const AppColorsScreen({super.key});
 
-  // Hàm phụ (helper widget) để vẽ một ô màu 80x80 kèm tên màu ở dưới đúng yêu cầu bài tập
-  Widget _OMau(String tenMau, Color maMasc) {
+  Widget _oMau(String tenMau, Color maMasc) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -62,20 +61,20 @@ class AppColorsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Wrap(
-            spacing: 16, // Khoảng cách theo chiều ngang giữa các ô
+            spacing: 16, 
             runSpacing:
-                16, // Khoảng cách theo chiều dọc khi xuống hàng[cite: 9]
+                16, // Khoảng cách theo chiều dọc khi xuống hàng
             children: [
-              _OMau('primary', AppColors.primary),
-              _OMau('primaryLight', AppColors.primaryLight),
-              _OMau('secondary', AppColors.secondary),
-              _OMau('success', AppColors.success),
-              _OMau('error', AppColors.error),
-              _OMau('background', AppColors.background),
-              _OMau('surface', AppColors.surface),
-              _OMau('textPrimary', AppColors.textPrimary),
-              _OMau('textSecondary', AppColors.textSecondary),
-              _OMau('divider', AppColors.divider),
+              _oMau('primary', AppColors.primary),
+              _oMau('primaryLight', AppColors.primaryLight),
+              _oMau('secondary', AppColors.secondary),
+              _oMau('success', AppColors.success),
+              _oMau('error', AppColors.error),
+              _oMau('background', AppColors.background),
+              _oMau('surface', AppColors.surface),
+              _oMau('textPrimary', AppColors.textPrimary),
+              _oMau('textSecondary', AppColors.textSecondary),
+              _oMau('divider', AppColors.divider),
             ],
           ),
         ),
