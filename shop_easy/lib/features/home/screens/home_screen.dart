@@ -5,6 +5,7 @@ import 'package:shop_easy/features/cart/screens/cart_screen.dart';
 import 'package:shop_easy/features/chat/screens/chat_screen.dart';
 import 'package:shop_easy/features/product/screens/product_detail_screen.dart';
 import 'package:shop_easy/features/product/widgets/product_cart.dart';
+import 'package:shop_easy/features/weather/screens/weather_screen.dart';
 
 import '../../../core/constants/app_colors.dart';
 
@@ -194,6 +195,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(width: 8),
+
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WeatherScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.wb_sunny_outlined,
+                    color: Colors.white,
+                    size: 26.0,
+                  ),
                 ),
                 const SizedBox(width: 8),
 

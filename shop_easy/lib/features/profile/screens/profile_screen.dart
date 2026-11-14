@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_easy/core/constants/app_colors.dart';
 import 'package:shop_easy/features/auth/screens/login_screen.dart';
 import 'package:shop_easy/features/cart/screens/cart_screen.dart';
+import 'package:shop_easy/features/order/screens/order_screen.dart';
 import 'package:shop_easy/features/profile/widget/profile_header_card.dart';
 import 'package:shop_easy/features/profile/widget/profile_menu_item.dart';
 import 'package:shop_easy/features/settings/screens/settings_screen.dart';
@@ -79,7 +80,12 @@ class ProfileScreen extends StatelessWidget {
                 title: 'Đơn hàng',
                 subtitle: '03 đơn đang xử lý',
                 accent: const Color(0xFF3B82F6),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OrderScreen()),
+                  );
+                },
               ),
               ProfileMenuItem(
                 icon: Icons.location_on_outlined,

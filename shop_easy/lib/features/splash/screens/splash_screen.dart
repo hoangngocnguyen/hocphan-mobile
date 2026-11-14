@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_easy/features/onboarding/screens/onboarding_screen.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../main/screens/main_layout_screen.dart';
@@ -54,22 +56,58 @@ class _SplashScreenState extends State<SplashScreen>
     // Chạy chuỗi Animation
     _controller.forward();
 
-    _navigateToHome();
+    // _navigateToHome();
+    // Thay vì về home thì kiểm tra điều hướng sau khi chạy hiệu ứng
+    _checkFirstTimeUser();
   }
 
-  Future<void> _navigateToHome() async {
+  // Future<void> _navigateToHome() async {
+  //   await Future.delayed(const Duration(seconds: 3));
+
+  //   if (!mounted) return;
+
+  //   Navigator.of(context).pushReplacement(
+  //     MaterialPageRoute(
+  //       builder: (context) => const MainLayoutScreen(
+  //         initialIndex: 0,
+  //         isLoggedIn: false,
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Future<void> _checkFirstTimeUser() async {
+    // Đảm bảo chạy xong splash
     await Future.delayed(const Duration(seconds: 3));
 
     if (!mounted) return;
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const MainLayoutScreen(
-          initialIndex: 0,
-          isLoggedIn: false,
+    // Lấy instance của SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+
+    // Đọc trạng thái (default = false nếu mở app lần đầu)
+    final bool seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
+
+    if (!mounted) return;
+
+    if (seenOnboarding) {
+      // Nếu xem onboarding rồi thì vô trang chủ
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: 
+          (context) => const MainLayoutScreen(
+            initialIndex: 0,
+            isLoggedIn: false,
+          )
+        )
+      );
+    } else {
+      // Nếu chưa xem lần nào -> Chuyển sang màn hình Onboarding
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const OnboardingScreen(),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
