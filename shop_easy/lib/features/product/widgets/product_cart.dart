@@ -37,6 +37,7 @@ class ProductCart extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // giãn vừa tầm height
         children: [
           // Stack chứa Ảnh, nhãn giảm giá và nút yêu thích
           Stack(
@@ -90,93 +91,79 @@ class ProductCart extends StatelessWidget {
           ),
 
           // Phần thông tin chi tiết
-          Expanded(child: Padding(
-            padding: const EdgeInsetsGeometry.all(8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 4,
+                  runSpacing: 2,
+                  children: [
+                    const Icon(Icons.star, size: 13, color: Colors.amber),
+                    Text(
+                      '$rating',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '($reviewCount)',
+                      style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 4,
+                  runSpacing: 2,
                   children: [
                     Text(
-                      name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,                      
+                      AppFormatters.formatCurrency(currentPrice),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepOrange,
                       ),
                     ),
-                    const SizedBox(height: 4,),
-                    // Row đánh giá: sao, điểm, số lượng đánh giá
-                    Row(
-                      children: [
-                        const Icon(Icons.star, size: 13, color: Colors.amber),
-                          const SizedBox(width: 3),
-                          Text(
-                            '$rating',
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(width: 3),
-                          Text(
-                            '($reviewCount)',
-                            style: TextStyle(fontSize: 10, color: Colors.grey[600]),
-                          ),
-                      ],
+                    Text(
+                      AppFormatters.formatCurrency(originalPrice),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey,
+                        decoration: TextDecoration.lineThrough,
+                      ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Giá 
-                        Row(
-                          children: [
-                            Text(
-                              AppFormatters.formatCurrency(currentPrice),
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepOrange
-                              ),
-                            ),
-                            SizedBox(width: 4,),
-                            Text(
-                              AppFormatters.formatCurrency(originalPrice),
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-
-                            // Nút add to cart
-
-                            SizedBox(
-                              width: double.infinity,
-                              height: 30,
-                              child: FilledButton(
-                                onPressed: addToCart,
-                                style: FilledButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                ),
-                                child: const Text('Thêm vào giỏ', style: TextStyle(fontSize: 11)),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
                   ],
-                  
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 30,
+                  child: FilledButton(
+                    onPressed: addToCart,
+                    style: FilledButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                    child: const Text('Thêm vào giỏ', style: TextStyle(fontSize: 11)),
+                  ),
                 ),
               ],
             ),
-            
-            ))
+          ),
         ],
       ),
     );

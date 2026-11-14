@@ -26,8 +26,8 @@ class StandaloneWidgetApp extends StatelessWidget {
         ),
         body: Center(
           // Bọc padding để ngắm card độc lập ở giữa màn hình
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: 180,
             child: ProductCart(
               imageUrl: '', // Để trống sẽ hiển thị icon placeholder
                 name: 'Giày Sneaker Thể Thao Nam Nữ Phong Cách',
