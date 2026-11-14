@@ -36,7 +36,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     ];
 
     return Scaffold(
-      body: IndexedStack(
+      body: IndexedStack( // giữ toàn bộ danh sách màn hình trong bộ nhớ, chỉ hiển thị màn hình theo index hiện tại -> chuyển tab không reload
         index: _selectedIndex,
         children: pages,
       ),
@@ -52,7 +52,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
             selectedIndex: _selectedIndex,
             onDestinationSelected: (index) {
               setState(() {
-                _selectedIndex = index;
+                _selectedIndex = index; // bấm nút bên dưới thay đổi index -> chuyển trang
               });
             },
             backgroundColor: AppColors.surface,

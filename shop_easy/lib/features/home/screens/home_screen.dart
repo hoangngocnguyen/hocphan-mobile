@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_easy/features/auth/screens/login_screen.dart';
 import 'package:shop_easy/features/auth/screens/register_screen.dart';
 import 'package:shop_easy/features/cart/screens/cart_screen.dart';
+import 'package:shop_easy/features/chat/screens/chat_screen.dart';
 import 'package:shop_easy/features/product/screens/product_detail_screen.dart';
 import 'package:shop_easy/features/product/widgets/product_cart.dart';
 
@@ -193,6 +194,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(width: 8),
+
+                // 2. Nút nhắn tin
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ChatScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.chat_bubble_outline_rounded,
+                    color: Colors.white,
+                    size: 26.0,
+                  ),
                 ),
               ]
             : [
