@@ -20,7 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   String _searchQuery = '';
   String _selectedCategory = 'Tất cả';
 
-  final List<String> _categories = ['Tất cả', 'Điện thoại', 'Laptop', 'Thời trang', 'Phụ kiện', 'Giày dép'];
+  final List<String> _categories = [
+    'Tất cả',
+    'Điện thoại',
+    'Laptop',
+    'Thời trang',
+    'Phụ kiện',
+    'Giày dép',
+  ];
 
   final List _allProducts = [
     {
@@ -88,14 +95,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final filteredProducts = _allProducts.where((product) {
-      final matchesCategory = _selectedCategory == 'Tất cả' || product['category'] == _selectedCategory;
-      final matchesSearch = product['name'].toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesCategory =
+          _selectedCategory == 'Tất cả' ||
+          product['category'] == _selectedCategory;
+      final matchesSearch = product['name'].toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
       return matchesCategory && matchesSearch;
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isLoggedIn ? 'ShopEasy - Trang chủ' : 'ShopEasy - Trang chủ'),
+        title: Text(
+          widget.isLoggedIn ? 'ShopEasy - Trang chủ' : 'ShopEasy - Trang chủ',
+        ),
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         actions: widget.isLoggedIn
@@ -112,10 +125,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.shopping_cart_outlined, color: Colors.white),
+                      icon: const Icon(
+                        Icons.shopping_bag_outlined,
+                        color: Colors.white,
+                        size: 28.0,
+                      ),
                     ),
                     Positioned(
-                      right: 8,
+                      right: 4,
                       top: 8,
                       child: Container(
                         width: 18,
@@ -144,22 +161,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
                     );
                   },
                   label: const Text(
                     'Đăng nhập',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   icon: const Icon(Icons.login_rounded, color: Colors.white),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 8.0,
+                  ),
                   child: OutlinedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterScreen(),
+                        ),
                       );
                     },
                     style: OutlinedButton.styleFrom(
@@ -192,7 +219,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               decoration: InputDecoration(
                 hintText: 'Tìm sản phẩm...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.textSecondary),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: AppColors.textSecondary,
+                ),
                 filled: true,
                 fillColor: AppColors.surfaceAlt,
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
@@ -218,7 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       selected: isSelected,
                       selectedColor: AppColors.primary,
                       labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : AppColors.textSecondary,
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.textSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                       backgroundColor: AppColors.surfaceAlt,
@@ -248,12 +280,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   )
                 : GridView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 0.73,
-                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.73,
+                        ),
                     itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
                       final item = filteredProducts[index];
@@ -268,7 +301,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         addToCart: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Đã thêm ${item['name']} vào giỏ hàng'),
+                              content: Text(
+                                'Đã thêm ${item['name']} vào giỏ hàng',
+                              ),
                               backgroundColor: AppColors.success,
                             ),
                           );
@@ -285,7 +320,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailScreen(product: item),
+                              builder: (context) =>
+                                  ProductDetailScreen(product: item),
                             ),
                           );
                         },
