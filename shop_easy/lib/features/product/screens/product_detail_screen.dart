@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shop_easy/core/constants/app_colors.dart';
 import 'package:shop_easy/core/utils/formatters.dart';
+import 'package:shop_easy/features/product/models/product_model.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final Map<String, dynamic> product;
+  final Product product;
 
   const ProductDetailScreen({super.key, required this.product});
 
@@ -16,17 +17,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int _currentIndex = 0;
 
   List<String> get _imageUrls {
-    final rawImages = widget.product['images'];
-    if (rawImages is List && rawImages.isNotEmpty) {
-      final parsed = rawImages.whereType<String>().toList();
-      if (parsed.isNotEmpty) return parsed;
+    if (widget.product.images.isNotEmpty) {
+      return widget.product.images;
     }
-
-    final singleImage = widget.product['imageUrl'];
-    if (singleImage is String && singleImage.isNotEmpty) {
-      return [singleImage];
+    if (widget.product.thumbnail.isNotEmpty) {
+      return [widget.product.thumbnail];
     }
-
     return [
       'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80',
     ];
@@ -40,10 +36,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentPrice = widget.product['currentPrice'] as num;
-    final originalPrice = widget.product['originalPrice'] as num;
-    final rating = (widget.product['rating'] as num).toDouble();
-    final reviewCount = (widget.product['reviewCount'] as num).toDouble();
+    final product = widget.product;
     final imageUrls = _imageUrls;
 
     return Scaffold(
@@ -167,7 +160,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      widget.product['name'] as String,
+                      product.title,
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -193,8 +186,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ],
               ),
               const SizedBox(height: 14),
-              
-              // ĐÃ SỬA: Hiển thị đủ 5 ngôi sao vàng giống bản mẫu
+
+              // Rating
               Row(
                 children: [
                   Row(
@@ -209,18 +202,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    rating.toStringAsFixed(1),
+                    product.rating.toStringAsFixed(1),
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '(${reviewCount.toInt()} đánh giá)',
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 13,
                     ),
                   ),
                 ],
@@ -231,7 +216,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    AppFormatters.formatCurrency(currentPrice.toDouble()),
+                    AppFormatters.formatPrice(product.finalPrice),
                     style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.w900,
@@ -240,7 +225,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    AppFormatters.formatCurrency(originalPrice.toDouble()),
+                    AppFormatters.formatPrice(product.price),
                     style: const TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 16,
@@ -255,7 +240,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       borderRadius: BorderRadius.circular(999),
                     ),
                     child: Text(
-                      '-${widget.product['discountPercent'] ?? 0}%',
+                      '-${product.discountPercentage.toStringAsFixed(0)}%',
                       style: const TextStyle(
                         color: AppColors.secondary,
                         fontWeight: FontWeight.w800,
@@ -265,6 +250,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ],
               ),
               const SizedBox(height: 18),
+              // Mô tả sản phẩm từ API
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
@@ -273,9 +259,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: const Color(0xFFE7ECF3)),
                 ),
-                child: const Text(
-                  'Sản phẩm cao cấp, được thiết kế cho người dùng yêu thích sự tiện lợi, phong cách và hiệu suất. Mỗi chi tiết được tối ưu để mang lại trải nghiệm tốt nhất trong quá trình sử dụng hằng ngày.',
-                  style: TextStyle(
+                child: Text(
+                  product.description,
+                  style: const TextStyle(
                     color: AppColors.textSecondary,
                     height: 1.7,
                     fontSize: 15,
@@ -318,7 +304,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        // ĐÃ SỬA: Đổi màu nền nút Mua ngay thành màu cam (AppColors.secondary)
                         backgroundColor: AppColors.secondary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),

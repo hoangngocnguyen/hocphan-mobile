@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_easy/features/product/providers/product_provider.dart';
 import 'package:shop_easy/features/splash/screens/splash_screen.dart';
 
 import 'core/theme/app_theme.dart';
@@ -11,8 +12,15 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeController(preferences: prefs),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ThemeController(preferences: prefs),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProductProvider(),
+        ),
+      ],
       child: const ShopEasyApp(),
     ),
   );

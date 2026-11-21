@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shop_easy/core/utils/formatters.dart';
+import 'package:shop_easy/features/product/models/product_model.dart';
 
 class ProductCart extends StatelessWidget {
-  final String imageUrl;
-  final String name;
-  final double rating;
-  final double reviewCount;
-  final double currentPrice;
-  final double originalPrice;
-  final int discountPercent;
+  final Product product;
   final VoidCallback addToCart;
   final VoidCallback onFavoritePressed;
   final VoidCallback? onTap;
 
   const ProductCart({
     super.key,
-    required this.imageUrl,
-    required this.name,
-    required this.rating,
-    required this.reviewCount,
-    required this.currentPrice,
-    required this.originalPrice,
-    required this.discountPercent,
+    required this.product,
     required this.addToCart,
     required this.onFavoritePressed,
     this.onTap,
@@ -47,7 +36,7 @@ class ProductCart extends StatelessWidget {
                 AspectRatio(
                   aspectRatio: 1.1,
                   child: Image.network(
-                    imageUrl,
+                    product.thumbnail,
                     fit: BoxFit.cover,
                     errorBuilder: ((context, error, stackTrace) => Container(
                       color: Colors.grey[200],
@@ -65,7 +54,7 @@ class ProductCart extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      '-$discountPercent%',
+                      '-${product.discountPercentage.toStringAsFixed(0)}%',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 11,
@@ -97,7 +86,7 @@ class ProductCart extends StatelessWidget {
                   SizedBox(
                     height: 34,
                     child: Text(
-                      name,
+                      product.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -115,12 +104,8 @@ class ProductCart extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, size: 13, color: Colors.amber),
                       Text(
-                        '$rating',
+                        '${product.rating}',
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '($reviewCount)',
-                        style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -131,7 +116,7 @@ class ProductCart extends StatelessWidget {
                     runSpacing: 2,
                     children: [
                       Text(
-                        AppFormatters.formatCurrency(currentPrice),
+                        AppFormatters.formatPrice(product.finalPrice),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -139,7 +124,7 @@ class ProductCart extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        AppFormatters.formatCurrency(originalPrice),
+                        AppFormatters.formatPrice(product.price),
                         style: TextStyle(
                           fontSize: 10,
                           color: Colors.grey,

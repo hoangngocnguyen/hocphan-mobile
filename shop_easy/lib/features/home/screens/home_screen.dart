@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_easy/features/auth/screens/login_screen.dart';
 import 'package:shop_easy/features/auth/screens/register_screen.dart';
 import 'package:shop_easy/features/cart/screens/cart_screen.dart';
 import 'package:shop_easy/features/chat/screens/chat_screen.dart';
+import 'package:shop_easy/features/product/models/product_model.dart';
+import 'package:shop_easy/features/product/providers/product_provider.dart';
 import 'package:shop_easy/features/product/screens/product_detail_screen.dart';
 import 'package:shop_easy/features/product/widgets/product_cart.dart';
 import 'package:shop_easy/features/weather/screens/weather_screen.dart';
@@ -20,130 +23,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _searchQuery = '';
-  String _selectedCategory = 'Tất cả';
+  final ScrollController _scrollController = ScrollController();
 
-  final List<String> _categories = [
-    'Tất cả',
-    'Điện thoại',
-    'Laptop',
-    'Thời trang',
-    'Phụ kiện',
-    'Giày dép',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Lần đầu load danh sách sản phẩm từ API
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProductProvider>().fetchProducts();
+    });
 
-  final List _allProducts = [
-    {
-      'name': 'Giày Sneaker Thể Thao Nam Nữ Phong Cách',
-      'category': 'Giày dép',
-      'rating': 4.8,
-      'reviewCount': 128,
-      'currentPrice': 450000,
-      'originalPrice': 600000,
-      'discountPercent': 25,
-      'imageUrl': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80',
-      'images': [
-        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=80',
-        'https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=900&q=80',
-      ],
-    },
-    {
-      'name': 'Laptop Lenovo ThinkBook 14 G6 IRL 21KG00BXVN (i5-13500H, Iris Xe Graphics, Ram 16GB DDR5, SSD 512GB, 14 Inch IPS WUXGA 60Hz, Win 11)',
-      'category': 'Laptop',
-      'rating': 4.7,
-      'reviewCount': 89,
-      'currentPrice': 21990000,
-      'originalPrice': 25000000,
-      'discountPercent': 12,
-      'imageUrl': 'https://bizweb.dktcdn.net/thumb/grande/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-5.jpg?v=1730690560750',
-      'images': [
-        'https://bizweb.dktcdn.net/thumb/grande/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-5.jpg?v=1730690560750',
-        'https://bizweb.dktcdn.net/thumb/1024x1024/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-6.jpg?v=1730690560890',
-        'https://bizweb.dktcdn.net/thumb/1024x1024/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-6.jpg?v=1730690560890',
-      ],
-    },
-    {
-      'name': 'Áo khoác gió thể thao trượt nước cao cấp',
-      'category': 'Thời trang',
-      'rating': 4.6,
-      'reviewCount': 45,
-      'currentPrice': 320000,
-      'originalPrice': 450000,
-      'discountPercent': 28,
-      'imageUrl': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSXioZHMB2KS5qQSorYjEG6AoyXaqeaAMSHRMt4DaYtQ&s=10',
-      'images': [
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSXioZHMB2KS5qQSorYjEG6AoyXaqeaAMSHRMt4DaYtQ&s=10',
-        'https://aokhoacnam.vn/upload/product/akn-209/ao-gio-trang-chong-nuoc-cao-cap-0.jpg',
-        'https://aokhoacnam.vn/upload/product/akn-209/ao-gio-trang-chong-nuoc-cao-cap-4.jpg',
-      ],
-    },
-    {
-      'name': 'Laptop Asus Vivobook 16 X1605VA-MB360W (i5-1335U, Iris Xe Graphics, Ram 16GB, SSD 512GB, 16 Inch IPS WUXGA 60Hz, Win 11)',
-      'category': 'Laptop',
-      'rating': 4.8,
-      'reviewCount': 142,
-      'currentPrice': 18490000,
-      'originalPrice': 20990000,
-      'discountPercent': 12,
-      'imageUrl': 'https://cdn.tgdd.vn/Products/Images/44/309375/asus-vivobook-16-x1605va-i5-mb360w-glr-14-750x500.jpg',
-      'images': [
-        'https://cdn.tgdd.vn/Products/Images/44/309375/asus-vivobook-16-x1605va-i5-mb360w-glr-14-750x500.jpg',
-        'https://cdn.tgdd.vn/Products/Images/44/309375/asus-vivobook-16-x1605va-i5-mb360w-glr-15-750x500.jpg',
-      ],
-    },
-    {
-      'name': 'Laptop Lenovo IdeaPad Slim 3 15IAH8 83ER00EVN (i5-12450H, UHD Graphics, Ram 16GB LPDDR5, SSD 512GB, 15.6 Inch IPS FHD, Win 11)',
-      'category': 'Laptop',
-      'rating': 4.6,
-      'reviewCount': 215,
-      'currentPrice': 14990000,
-      'originalPrice': 17490000,
-      'discountPercent': 14,
-      'imageUrl': 'https://cdn.tgdd.vn/Products/Images/44/313333/Slider/vi-vn-lenovo-ideapad-slim-3-15iah8-i5-83er00evn-slider-3.jpg',
-      'images': [
-        'https://cdn.tgdd.vn/Products/Images/44/313333/Slider/vi-vn-lenovo-ideapad-slim-3-15iah8-i5-83er00evn-slider-3.jpg',
-      ],
-    },
-    {
-      'name': 'Laptop HP 15 fd0235TU 9Q970PA (i5-1334U, Iris Xe Graphics, Ram 16GB DDR4, SSD 512GB, 15.6 Inch IPS FHD 60Hz, Win 11)',
-      'category': 'Laptop',
-      'rating': 4.7,
-      'reviewCount': 96,
-      'currentPrice': 16590000,
-      'originalPrice': 18990000,
-      'discountPercent': 13,
-      'imageUrl': 'https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/44/340486/hp-15-fd0235tu-i5-9q970pa-glr-14-638954299541143318.jpg',
-      'images': [
-        'https://cdnv2.tgdd.vn/mwg-static/tgdd/Products/Images/44/340486/hp-15-fd0235tu-i5-9q970pa-glr-14-638954299541143318.jpg',
-      ],
-    },
-    {
-      'name': 'Laptop Lenovo ThinkBook 14 G6 IRL 21KG00BQVN (i7-1355U, Iris Xe Graphics, Ram 16GB DDR5, SSD 512GB, 14 Inch IPS WUXGA 100% sRGB, Win 11)',
-      'category': 'Laptop',
-      'rating': 4.9,
-      'reviewCount': 117,
-      'currentPrice': 20490000,
-      'originalPrice': 22990000,
-      'discountPercent': 11,
-      'imageUrl': 'https://bizweb.dktcdn.net/thumb/grande/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-5.jpg?v=1730690560750',
-      'images': [
-        'https://bizweb.dktcdn.net/thumb/grande/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-5.jpg?v=1730690560750',
-        'https://bizweb.dktcdn.net/thumb/1024x1024/100/329/122/products/laptop-lenovo-thinkbook-14-g6-irl-21kg00bxvn-6.jpg?v=1730690560890',
-      ],
-    },
-  ];
+    // Lắng nghe scroll để load more (infinite scroll)
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<ProductProvider>().loadMore();
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filteredProducts = _allProducts.where((product) {
-      final matchesCategory =
-          _selectedCategory == 'Tất cả' ||
-          product['category'] == _selectedCategory;
-      final matchesSearch = product['name'].toLowerCase().contains(
-        _searchQuery.toLowerCase(),
-      );
-      return matchesCategory && matchesSearch;
-    }).toList();
+    final productProvider = context.watch<ProductProvider>();
+    final allProducts = productProvider.products;
+
+    // Lọc theo search query
+    final filteredProducts = _searchQuery.isEmpty
+        ? allProducts
+        : allProducts
+            .where((product) =>
+                product.title.toLowerCase().contains(_searchQuery.toLowerCase()))
+            .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -284,6 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Thanh tìm kiếm
           Container(
             padding: const EdgeInsets.all(16.0),
             color: AppColors.surface,
@@ -309,103 +229,113 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Container(
-            color: AppColors.surface,
-            padding: const EdgeInsets.only(left: 16.0, bottom: 12.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: _categories.map((category) {
-                  final isSelected = _selectedCategory == category;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ChoiceChip(
-                      label: Text(category),
-                      selected: isSelected,
-                      selectedColor: AppColors.primary,
-                      labelStyle: TextStyle(
-                        color: isSelected
-                            ? Colors.white
-                            : AppColors.textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      backgroundColor: AppColors.surfaceAlt,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide.none,
-                      ),
-                      onSelected: (_) {
-                        setState(() {
-                          _selectedCategory = category;
-                        });
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
           const SizedBox(height: 8),
+
+          // Nội dung chính
           Expanded(
-            child: filteredProducts.isEmpty
-                ? const Center(
-                    child: Text(
-                      'Không tìm thấy sản phẩm phù hợp',
-                      style: TextStyle(color: AppColors.textSecondary),
-                    ),
-                  )
-                : GridView.builder(
-                    padding: const EdgeInsets.all(16.0),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
-                          childAspectRatio: 0.73,
-                        ),
-                    itemCount: filteredProducts.length,
-                    itemBuilder: (context, index) {
-                      final item = filteredProducts[index];
-                      return ProductCart(
-                        imageUrl: item['imageUrl'],
-                        name: item['name'],
-                        rating: item['rating'],
-                        reviewCount: (item['reviewCount'] as num).toDouble(),
-                        currentPrice: item['currentPrice'],
-                        originalPrice: item['originalPrice'],
-                        discountPercent: item['discountPercent'],
-                        addToCart: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Đã thêm ${item['name']} vào giỏ hàng',
-                              ),
-                              backgroundColor: AppColors.success,
-                            ),
-                          );
-                        },
-                        onFavoritePressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Đã lưu sản phẩm yêu thích'),
-                              backgroundColor: AppColors.primary,
-                            ),
-                          );
-                        },
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDetailScreen(product: item),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
+            child: _buildBody(productProvider, filteredProducts),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBody(ProductProvider provider, List<Product> products) {
+    // Trạng thái loading lần đầu
+    if (provider.isLoading && provider.products.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // Trạng thái lỗi
+    if (provider.error != null && provider.products.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: AppColors.textSecondary),
+            const SizedBox(height: 12),
+            Text(
+              provider.error!,
+              style: const TextStyle(color: AppColors.textSecondary),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => provider.refresh(),
+              child: const Text('Thử lại'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Danh sách rỗng
+    if (products.isEmpty) {
+      return const Center(
+        child: Text(
+          'Không tìm thấy sản phẩm phù hợp',
+          style: TextStyle(color: AppColors.textSecondary),
+        ),
+      );
+    }
+
+    // Danh sách sản phẩm + load more
+    return RefreshIndicator(
+      onRefresh: () => provider.refresh(),
+      child: GridView.builder(
+        controller: _scrollController,
+        padding: const EdgeInsets.all(16.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.73,
+        ),
+        // +1 nếu đang load more để hiện indicator ở cuối
+        itemCount: products.length + (provider.isLoadingMore ? 1 : 0),
+        itemBuilder: (context, index) {
+          // Indicator load more ở cuối danh sách
+          if (index >= products.length) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          final product = products[index];
+          return ProductCart(
+            product: product,
+            addToCart: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Đã thêm ${product.title} vào giỏ hàng',
+                  ),
+                  backgroundColor: AppColors.success,
+                ),
+              );
+            },
+            onFavoritePressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Đã lưu sản phẩm yêu thích'),
+                  backgroundColor: AppColors.primary,
+                ),
+              );
+            },
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ProductDetailScreen(product: product),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
